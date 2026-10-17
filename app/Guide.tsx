@@ -1,0 +1,12 @@
+'use client';
+import {useEffect,useRef,useState} from 'react';
+import {Orbit,X,Search,ArrowUpRight} from 'lucide-react';
+import {chapters,sources,objections,type Chapter,type Layer} from './research';
+export default function Guide({chapter,onClose}:{chapter:Chapter;onClose:()=>void}){
+ const [query,setQuery]=useState(''),[selected,setSelected]=useState(0),[layer,setLayer]=useState<Layer>('simple');const dialog=useRef<HTMLDialogElement>(null);
+ const bank=[{q:chapter.question,...chapter},...objections,...chapters.filter(c=>c.id!==chapter.id).map(c=>({q:c.question,...c}))];
+ useEffect(()=>{const d=dialog.current;d?.showModal();return()=>d?.close();},[]);
+ const answer=bank[selected];const filtered=bank.map((q,i)=>({q,i})).filter(({q})=>(q.q+' '+('title' in q?q.title:'')+' '+q.simple).toLowerCase().includes(query.toLowerCase()));
+ return <dialog ref={dialog} className="guide" onCancel={onClose} aria-labelledby="guide-title"><div className="guide-header"><span><Orbit size={20}/> Research guide</span><button aria-label="Close research guide" onClick={onClose}><X size={20}/></button></div><div className="guide-body"><div className="eyebrow">CURATED CONVERSATION · NO GENERATIVE AI</div><h2 id="guide-title">Follow your curiosity.</h2><p>Prepared answers, grounded in the current chapter.</p><label className="search"><Search size={17}/><input placeholder="Find a question…" aria-label="Find a curated question" value={query} onChange={e=>setQuery(e.target.value)}/></label><div className="questions">{filtered.map(({q,i})=><button key={q.q} className={selected===i?'chosen':''} onClick={()=>{setSelected(i);setLayer('simple');}}>{q.q}<ArrowUpRight size={15}/></button>)}{!filtered.length&&<p>No prepared answer matches. Try “family”, “diagnostic”, or “falsify”.</p>}</div><div className="answer" aria-live="polite"><span className="eyebrow">RESEARCH GUIDE</span><h3>{answer.q}</h3><div className="layer-tabs">{(['simple','scientific','math','evidence','limits'] as Layer[]).map(l=><button key={l} aria-pressed={layer===l} onClick={()=>setLayer(l)}>{l==='simple'?'Simple':l==='scientific'?'Scientific':`Show ${l}`}</button>)}</div><p>{answer[layer]}</p>{layer==='evidence'&&'source' in answer&&typeof answer.source==='number'&&<a target="_blank" rel="noreferrer" href={sources[answer.source].url}>Read {sources[answer.source].title} ↗</a>}</div><p className="caption">Answers are authored content. No personal data is collected or assessed.</p></div></dialog>;
+}
+

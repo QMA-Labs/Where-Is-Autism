@@ -1,0 +1,16 @@
+import fs from 'node:fs/promises';
+let s=await fs.readFile('app/journey-data.ts','utf8');
+s=s.replace("refs:['communication','nice']","refs:['communication','replication','nice']");
+s=s.replace('آزمایش Crompton دربارهٔ انتقال اطلاعات اهمیت بافت تعامل را نشان می‌دهد؛ اندازه‌گیری مستقیم عاطفه نیست.','پژوهش‌های Crompton انتقال اطلاعات را سنجیده‌اند، نه عاطفه را. نتیجهٔ ۲۰۲۰ در مقایسهٔ اصلیِ گزارش ثبت‌شدهٔ ۲۰۲۵ تکرار نشد؛ استناد باید هر دو نتیجه را در نظر بگیرد.');
+s=s.replace('Crompton و همکاران انتقال داستان در گروه‌ها را بررسی کردند. این پشتوانهٔ پرسش دربارهٔ تعامل است، نه اثبات احساس یا نیت خاص یک فرد.','مطالعهٔ ۲۰۲۰ و گزارش ثبت‌شدهٔ ۲۰۲۵ نتیجهٔ یکسانی دربارهٔ تفاوت انتقال اطلاعات میان گروه‌ها نداشتند. این پژوهش‌ها نه احساس درونی را سنجیده‌اند و نه نیت شخص را اثبات می‌کنند.');
+await fs.writeFile('app/journey-data.ts',s);
+s=await fs.readFile('app/JourneyGuide.tsx','utf8');
+s=s.replace("const layerNames=","const normalize=(s:string)=>s.replace(/ي/g,'ی').replace(/ك/g,'ک').replace(/\\u200c/g,' ').toLowerCase();\nconst layerNames=");
+s=s.replace('(q.q+q.keywords).includes(query.trim())','normalize(q.q+q.keywords).includes(normalize(query.trim()))');
+await fs.writeFile('app/JourneyGuide.tsx',s);
+s=await fs.readFile('portable/Explorer.tsx','utf8');
+s=s.replace("function profile(){return JSON.parse(document.getElementById('creator-data')!.textContent!);}","function profile(){return JSON.parse(document.getElementById('creator-data')!.textContent!);}\nfunction birthEn(p:ReturnType<typeof profile>){return p.birth==='۱۲ مارس ۲۰۱۰ · ۱۶ ساله در سپتامبر ۲۰۲۶'?'Born 12 March 2010 · 16 as of September 2026':p.birth;}\nfunction educationEn(p:ReturnType<typeof profile>){return p.education==='پایهٔ دهم'?'10th-grade student':p.education;}");
+s=s.replace('Born 12 March 2010 · Age 16 on 22 September 2026<br>10th-grade student','${esc(birthEn(p))}<br>${esc(educationEn(p))}');
+s=s.replace("const [hash,setHash]=useState(location.hash)","const [creator,setCreator]=useState(profile);\n useEffect(()=>{const update=()=>setCreator(profile());addEventListener('wia-profile-updated',update);return()=>removeEventListener('wia-profile-updated',update);},[]);\n const [hash,setHash]=useState(location.hash)");
+s=s.replace('<h2>Masiha Nayeri</h2><p>Born 12 March 2010 · 16 as of September 2026<br/>10th-grade student · Independent project initiator</p><a href="https://github.com/QMA-Labs" target="_blank" rel="noreferrer">GitHub / QMA-Labs</a><a href="mailto:masihanayeriii@gmail.com">masihanayeriii@gmail.com</a>','<h2>{creator.name}</h2><p>{birthEn(creator)}<br/>{educationEn(creator)} · Independent project initiator</p><a href={creator.github} target="_blank" rel="noreferrer">GitHub / {creator.github.split("/").filter(Boolean).pop()}</a><a href={"mailto:"+creator.email}>{creator.email}</a>');
+await fs.writeFile('portable/Explorer.tsx',s);
