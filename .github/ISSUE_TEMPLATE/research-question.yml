@@ -1,0 +1,30 @@
+name: Research question or critique
+description: Challenge an inference, improve a measure, or suggest a test.
+title: "[Research] "
+body:
+  - type: markdown
+    attributes:
+      value: "A precise objection helps the project. Avoid sharing identifiable participant or medical information."
+  - type: input
+    id: claim
+    attributes:
+      label: Which claim or question?
+      description: Name an entry in the claim atlas or a passage in the framework.
+    validations:
+      required: true
+  - type: textarea
+    id: concern
+    attributes:
+      label: What inference needs revision?
+      description: Separate the observation from the interpretation you question.
+    validations:
+      required: true
+  - type: textarea
+    id: alternative
+    attributes:
+      label: Alternative explanation or useful test
+  - type: textarea
+    id: sources
+    attributes:
+      label: Relevant sources or software context
+

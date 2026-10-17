@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "Please identify this work as an independent concept proposal and software prototype, rather than a validated empirical theory."
+type: software
+title: "Where Is Autism? — The Geometry of a Distributed Mind"
+authors:
+  - family-names: Nayeri
+    given-names: Masiha
+repository-code: "https://github.com/QMA-Labs/Where-Is-Autism"
+url: "https://github.com/QMA-Labs/Where-Is-Autism"
+abstract: "An interactive research proposition that organizes fourteen questions about observation, context, response interfaces and measurement. No original empirical results or validated diagnostic model are supplied."
+keywords:
+  - interactive research
+  - measurement
+  - autism
+  - concept proposal

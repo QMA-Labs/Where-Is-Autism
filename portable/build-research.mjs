@@ -33,6 +33,13 @@ await fs.writeFile(out+'/Masiha-Nayeri-Research-Dossier.html',documentHTML(false
 await fs.writeFile(out+'/Masiha-Nayeri-Research-Inquiry.html',documentHTML(true));
 await fs.writeFile(out+'/Start-Windows.cmd','@echo off\r\nstart "" "%~dp0index.html"\r\n');
 await fs.writeFile(out+'/README.txt','WHERE IS AUTISM? — Research-group edition 2.0\nMasiha Nayeri / September 2026\n\nOpen index.html in a browser. No installation, server or internet is required. Extract the ZIP first.\n\nFour routes: Overview; Ideas & hypotheses; Evidence; Proposed study.\nAll UI and documents are English. Fourteen detailed idea entries, eleven sources, a proposed study, reviewer questions and creator/contact information.\n\nMasiha-Nayeri-Research-Dossier.html: full standalone dossier.\nMasiha-Nayeri-Research-Inquiry.html: short standalone research inquiry.\nPrint either document from your browser to save a PDF. External source/contact links require internet.\n\nThis is an early-stage concept proposal, not an empirical paper, validated theory or diagnostic tool. No messages have been sent to any institution.\n\nSource architecture: portable/ResearchEdition.tsx, research-en-data.ts, research-documents.ts, research-edition.css. Rebuild: node portable/build-research.mjs with project dependencies installed. Design/IA: portable/RESEARCH-EDITION.md.\n');
-await fs.copyFile('outputs/where-is-autism-complete/THIRD-PARTY-LICENSES.txt',out+'/THIRD-PARTY-LICENSES.txt');
+let notices='Third-party software licenses\n\n';
+for(const name of ['react','react-dom','scheduler']){
+ let notice;
+ for(const candidate of ['LICENSE','LICENSE.txt']){try{notice=await fs.readFile(path.resolve('node_modules',name,candidate),'utf8');break;}catch(error){if(error.code!=='ENOENT')throw error;}}
+ if(!notice)throw new Error('Missing dependency license for '+name);
+ notices+='\n'+name+'\n'+notice+'\n';
+}
+await fs.writeFile(out+'/THIRD-PARTY-LICENSES.txt',notices);
 await fs.copyFile('portable/RESEARCH-EDITION.md',out+'/DESIGN-AND-ARCHITECTURE.md');
 console.log('Built English research edition: '+Math.round(Buffer.byteLength(html)/1024)+' KB');

@@ -1,9 +1,9 @@
 {
-  "name": "site-creator-vinext-starter",
+  "name": "where-is-autism",
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=22.13.0"
+    "node": ">=22.18.0"
   },
   "scripts": {
     "install:ci": "node scripts/install-ci.mjs",
@@ -11,7 +11,12 @@
     "build": "node scripts/run-framework.mjs build",
     "start": "node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js dev --config dist/server/wrangler.json --local --persist-to .wrangler/state --ip 127.0.0.1 --inspector-port 0",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "build:experience": "node portable/build.mjs",
+    "build:research": "node portable/build-research.mjs",
+    "build:portable": "node portable/build.mjs && node portable/build-research.mjs",
+    "check:types": "tsc --noEmit",
+    "check:content": "node portable/static-check.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
@@ -57,12 +62,14 @@
     "typescript": "5.9.3",
     "vinext": "1.0.0-beta.5",
     "vite": "8.0.13",
-    "wrangler": "4.92.0"
+    "wrangler": "4.92.0",
+    "esbuild": "0.28.0"
   },
   "type": "module",
   "overrides": {
     "miniflare": {
       "sharp": "0.35.4"
     }
-  }
+  },
+  "description": "An interactive research proposition: The Geometry of a Distributed Mind."
 }
